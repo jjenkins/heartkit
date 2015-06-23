@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -95,6 +96,9 @@ func Callback(c web.C, w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Setup the subscriptions
+		url := fmt.Sprintf("http://api.fitbit.com/1/user/%s/activities/apiSubscriptions", u.Profile.EncodedId)
+		res, err := client.Post(url, "", nil)
+		log.Printf("Sub Request: %+v", res)
 
 	} else if err != nil {
 
