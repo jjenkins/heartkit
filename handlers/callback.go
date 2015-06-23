@@ -17,6 +17,9 @@ import (
 )
 
 func Callback(c web.C, w http.ResponseWriter, r *http.Request) {
+
+	apiHost := "https://api.fitbit.com"
+
 	conf := c.Env["oauth_config"].(*oauth2.Config)
 	code := r.URL.Query().Get("code")
 	tok, err := conf.Exchange(oauth2.NoContext, code)
@@ -26,7 +29,7 @@ func Callback(c web.C, w http.ResponseWriter, r *http.Request) {
 	}
 
 	client := conf.Client(oauth2.NoContext, tok)
-	res, err := client.Get("https://api.fitbit.com/1/user/-/profile.json")
+	res, err := client.Get(fmt.Sprintf("%s/1/user/-/profile.json", apiHost))
 
 	body, err := ioutil.ReadAll(res.Body)
 	res.Body.Close()
@@ -96,7 +99,9 @@ func Callback(c web.C, w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Setup the subscriptions
-		url := fmt.Sprintf("http://api.fitbit.com/1/user/%s/activities/apiSubscriptions", u.Profile.EncodedId)
+		url := fmt.Sprintf("%s/1/user/%s/activities/apiSubscriptions/%s-activities.json",
+			apiHost, u.Profile.EncodedId, strings.ToLower(id.URL32()))
+
 		res, err := client.Post(url, "", nil)
 		log.Printf("Sub Request: %+v", res)
 
