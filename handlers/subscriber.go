@@ -18,7 +18,7 @@ func Subscriber(c web.C, w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	var notification map[string]interface{}
+	var notification interface{}
 	if err := json.Unmarshal(body, &notification); err != nil {
 		panic(err)
 	}
