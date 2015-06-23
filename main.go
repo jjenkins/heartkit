@@ -55,6 +55,7 @@ func main() {
 	goji.Get("/authorize", handlers.Authorize)
 	goji.Get("/connected", handlers.Connected)
 	goji.Get("/callback", handlers.Callback)
+	goji.Post("/subscriber", handlers.Subscriber)
 	goji.NotFound(handlers.NotFound)
 	goji.Serve()
 }
