@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/alivecor/surge",
+	"ImportPath": "github.com/jjenkins/heartkit",
 	"GoVersion": "go1.3.3",
 	"Deps": [
 		{
