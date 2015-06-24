@@ -99,11 +99,17 @@ func Callback(c web.C, w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Setup the subscriptions
-		url := fmt.Sprintf("%s/1/user/%s/activities/heart/apiSubscriptions/%s.json",
+		url := fmt.Sprintf("%s/1/user/%s/activities/apiSubscriptions/%s.json",
 			apiHost, u.Profile.EncodedId, strings.ToLower(id.URL32()))
 
 		res, err := client.Post(url, "", nil)
-		log.Printf("Sub Request: %+v", res)
+		log.Printf("Activities subscription request: %+v", res)
+
+		url = fmt.Sprintf("%s/1/user/%s/body/apiSubscriptions/%s.json",
+			apiHost, u.Profile.EncodedId, strings.ToLower(id.URL32()))
+
+		res, err = client.Post(url, "", nil)
+		log.Printf("Body subscription request: %+v", res)
 
 	} else if err != nil {
 
