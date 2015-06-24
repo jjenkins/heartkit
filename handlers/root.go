@@ -7,5 +7,5 @@ import (
 )
 
 func Root(c web.C, w http.ResponseWriter, r *http.Request) {
-	NotFound(w, r)
+	w.Write([]byte("HeartKit... powered by AliveCor"))
 }

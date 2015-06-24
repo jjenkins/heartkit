@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/Sam-Izdat/kee"
-	"github.com/alivecor/surge/models"
+	"github.com/jjenkins/heartkit/models"
 	"github.com/zenazn/goji/web"
 	"golang.org/x/oauth2"
 )

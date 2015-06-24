@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/alivecor/surge/handlers"
+	"github.com/jjenkins/heartkit/handlers"
 	_ "github.com/lib/pq"
 	"github.com/zenazn/goji"
 	"github.com/zenazn/goji/web"

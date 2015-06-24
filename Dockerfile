@@ -24,8 +24,8 @@ USER postgres
 # Note: here we use ``&&\`` to run commands one after the other - the ``\``
 #       allows the RUN command to span multiple lines.
 RUN    /etc/init.d/postgresql start &&\
-    psql --command "CREATE USER surge WITH SUPERUSER PASSWORD 'surge';" &&\
-    createdb -O surge surge
+    psql --command "CREATE USER heartkit WITH SUPERUSER PASSWORD 'heartkit';" &&\
+    createdb -O heartkit heartkit
 
 # Adjust PostgreSQL configuration so that remote connections to the
 # database are possible. 
