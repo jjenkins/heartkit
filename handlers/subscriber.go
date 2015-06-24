@@ -31,6 +31,9 @@ func Subscriber(c web.C, w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	log.Printf("Incoming notification: %+v", n[0].SubscriptionId)
+	for i := 0; i < len(n); i++ {
+		log.Printf("Incoming notification: %+v", n[i].SubscriptionId)
+	}
+
 	w.WriteHeader(http.StatusNoContent)
 }
