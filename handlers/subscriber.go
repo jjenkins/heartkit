@@ -14,7 +14,7 @@ type notification struct {
 	Date           string `json:"date"`
 	OwnerId        string `json:"ownerId"`
 	OwnerType      string `json:"ownerType"`
-	SubscriberId   string `json:"subscriberId"`
+	SubscriptionId string `json:"subscriptionId"`
 }
 
 func Subscriber(c web.C, w http.ResponseWriter, r *http.Request) {
