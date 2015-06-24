@@ -9,6 +9,14 @@ import (
 	"github.com/zenazn/goji/web"
 )
 
+type notification struct {
+	CollectionType string `json:"collectionType"`
+	Date           string `json:"date"`
+	OwnerId        string `json:"ownerId"`
+	OwnerType      string `json:"ownerType"`
+	SubscriberId   string `json:"subscriberId"`
+}
+
 func Subscriber(c web.C, w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -18,11 +26,11 @@ func Subscriber(c web.C, w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	var notification interface{}
-	if err := json.Unmarshal(body, &notification); err != nil {
+	var n []notification
+	if err := json.Unmarshal(body, &n); err != nil {
 		panic(err)
 	}
 
-	log.Printf("Incoming notification: %+v", notification)
+	log.Printf("Incoming notification: %+v", n)
 	w.WriteHeader(http.StatusNoContent)
 }
