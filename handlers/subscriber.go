@@ -49,9 +49,13 @@ func Subscriber(c web.C, w http.ResponseWriter, r *http.Request) {
 		err = stmt.QueryRow("4v3gl7mgszh55cwrxvkfe2z3va").Scan(&accessToken, &refreshToken)
 
 		tok := oauth2.Token{
+			TokenType:    "Bearer",
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,
 		}
+
+		log.Printf("OAuth Token: %+v", tok)
+
 		client := conf.Client(oauth2.NoContext, &tok)
 		res, err := client.Get(fmt.Sprintf("%s/1/user/-/profile.json", apiHost))
 
