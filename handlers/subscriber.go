@@ -40,6 +40,8 @@ func Subscriber(c web.C, w http.ResponseWriter, r *http.Request) {
 
 	for i := 0; i < len(n); i++ {
 		id := n[i].SubscriptionId
+		log.Printf("Incoming notification: %+v", n[i])
+
 		token, err := models.LoadToken(c, id)
 
 		if err != nil {
@@ -48,7 +50,6 @@ func Subscriber(c web.C, w http.ResponseWriter, r *http.Request) {
 			client := conf.Client(oauth2.NoContext, token)
 			res, err := client.Get(fmt.Sprintf("%s/1/user/-/profile.json", apiHost))
 
-			log.Printf("Incoming notification: %+v", n[i].SubscriptionId)
 			log.Printf("Notification response: %+v", res)
 			log.Printf("Notification error: %+v", err)
 		}
