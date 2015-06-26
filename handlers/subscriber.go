@@ -65,6 +65,8 @@ func Subscriber(c web.C, w http.ResponseWriter, r *http.Request) {
 				log.Printf("JSON error: %v", err)
 			}
 
+			log.Printf("JSON: %v", dataset)
+
 			log.Printf("Notification response: %+v", res)
 			log.Printf("Notification error: %+v", err)
 		}
