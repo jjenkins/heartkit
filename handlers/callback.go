@@ -46,13 +46,9 @@ func Callback(c web.C, w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	u.Profile.AccessToken = tok.AccessToken
-	u.Profile.RefreshToken = tok.RefreshToken
-
 	// Look up the user and see if we've seen this person
 	// before. If so, update the row, otherwise insert a
 	// new user into the table.
-
 	db := c.Env["db"].(*sql.DB)
 	tx, _ := db.Begin()
 
@@ -65,9 +61,9 @@ func Callback(c web.C, w http.ResponseWriter, r *http.Request) {
 		// Insert user into database.
 		query := `
 			INSERT INTO users
-				(id, encoded_id, gender, date_of_birth, oauth_access_token,
-					oauth_refresh_token, created_at, updated_at)
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+				(id, encoded_id, gender, date_of_birth, access_token,
+					refresh_token, expiry, token_type, created_at, updated_at)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 		`
 
 		stmt, err := tx.Prepare(query)
@@ -87,8 +83,10 @@ func Callback(c web.C, w http.ResponseWriter, r *http.Request) {
 			u.Profile.EncodedId,
 			u.Profile.Gender,
 			u.Profile.DateOfBirth,
-			u.Profile.AccessToken,
-			u.Profile.RefreshToken,
+			tok.AccessToken,
+			tok.RefreshToken,
+			tok.Expiry,
+			tok.TokenType,
 			time.Now(),
 			time.Now(),
 		)
@@ -120,8 +118,15 @@ func Callback(c web.C, w http.ResponseWriter, r *http.Request) {
 
 		query := `
 			UPDATE users
-			SET gender=$1, date_of_birth=$2, oauth_access_token=$3, oauth_refresh_token=$4, updated_at=$5
-			WHERE encoded_id=$6
+			SET
+				gender=$1,
+				date_of_birth=$2,
+				access_token=$3,
+				refresh_token=$4,
+				expiry=$5,
+				token_type=$6,
+				updated_at=$7
+			WHERE encoded_id=$8
 		`
 		stmt, err := tx.Prepare(query)
 		defer stmt.Close()
@@ -134,8 +139,10 @@ func Callback(c web.C, w http.ResponseWriter, r *http.Request) {
 		_, err = stmt.Exec(
 			u.Profile.Gender,
 			u.Profile.DateOfBirth,
-			u.Profile.AccessToken,
-			u.Profile.RefreshToken,
+			tok.AccessToken,
+			tok.RefreshToken,
+			tok.Expiry,
+			tok.TokenType,
 			time.Now(),
 			u.Profile.EncodedId,
 		)
