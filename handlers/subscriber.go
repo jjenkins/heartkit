@@ -39,16 +39,31 @@ func Subscriber(c web.C, w http.ResponseWriter, r *http.Request) {
 	conf := c.Env["oauth_config"].(*oauth2.Config)
 
 	for i := 0; i < len(n); i++ {
-		id := n[i].SubscriptionId
 		log.Printf("Incoming notification: %+v", n[i])
 
-		token, err := models.LoadToken(c, id)
+		subscriptionId := n[i].SubscriptionId
+		date := n[i].Date
+
+		token, err := models.LoadToken(c, subscriptionId)
 
 		if err != nil {
 			log.Printf("Error: %v", err)
 		} else {
+
 			client := conf.Client(oauth2.NoContext, token)
-			res, err := client.Get(fmt.Sprintf("%s/1/user/-/profile.json", apiHost))
+			url := fmt.Sprintf("%s/1/user/-/activities/heart/date/%s/1d/1sec.json", apiHost, date)
+			res, err := client.Get(url)
+
+			body, err := ioutil.ReadAll(res.Body)
+			res.Body.Close()
+			if err != nil {
+				log.Printf("Failed to read response body: %v", err)
+			}
+
+			var dataset interface{}
+			if err := json.Unmarshal(body, &dataset); err != nil {
+				log.Printf("JSON error: %v", err)
+			}
 
 			log.Printf("Notification response: %+v", res)
 			log.Printf("Notification error: %+v", err)
